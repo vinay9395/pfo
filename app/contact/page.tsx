@@ -17,12 +17,6 @@ const socials = [
 		label: "Email",
 		handle: "vanshfr69@gmail.com",
 	},
-	{
-		icon: <Telegram size={20} />,
-		href: "https://T.me/Vanshfr",
-		label: "Telegram",
-		handle: "Vanshfr",
-	},
 ];
 
 export default function Example() {
