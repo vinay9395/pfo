@@ -46,6 +46,16 @@ export default function Home() {
 
   const handleShowInfo = () => {
     setShowInfo(prev => !prev); // Toggle the showInfo state
+
+    // Scroll to the IP information section
+    if (!showInfo) {
+      setTimeout(() => {
+        const infoSection = document.getElementById("ip-info");
+        if (infoSection) {
+          infoSection.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100); // Delay to ensure the info is displayed first
+    }
   };
 
   return (
@@ -78,9 +88,9 @@ export default function Home() {
         Vansh~fr
       </h1>
 
-      {/* Conditionally render user IP information */}
+      {/* Section for displaying user IP information */}
       {showInfo && ipInfo && (
-        <div className="my-4 text-center text-white">
+        <div id="ip-info" className="my-4 text-center text-white transition-all duration-500 ease-in-out">
           <h2>Your IP Information:</h2>
           <p>IP: {ipInfo.ip}</p>
           <p>Hostname: {ipInfo.hostname}</p>
