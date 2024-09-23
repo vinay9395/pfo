@@ -1,5 +1,5 @@
 "use client";
-import { Github, Mail, Instagram, Telegram } from "lucide-react"; // Import Instagram and Telegram icons
+import { Github, Mail, Instagram,  } from "lucide-react"; // Import Instagram and Telegram icons
 import Link from "next/link";
 import { Navigation } from "../components/nav";
 import { Card } from "../components/card";
