@@ -32,7 +32,7 @@ export default function Home() {
   useEffect(() => {
     const fetchVisitorInfo = async () => {
       try {
-        const response = await fetch('https://ipinfo.io/json?token=9b0d535b05cb58'); // Replace with your token
+        const response = await fetch('https://ipinfo.io/json?token=YOUR_TOKEN'); // Replace with your token
         if (!response.ok) throw new Error('Network response was not ok');
         const data = await response.json();
         setIpInfo(data);
@@ -79,4 +79,31 @@ export default function Home() {
       </h1>
 
       {/* Conditionally render user IP information */}
-      {showInfo &&
+      {showInfo && ipInfo && (
+        <div className="my-4 text-center text-white">
+          <h2>Your IP Information:</h2>
+          <p>IP: {ipInfo.ip}</p>
+          <p>Hostname: {ipInfo.hostname}</p>
+          <p>City: {ipInfo.city}</p>
+          <p>Region: {ipInfo.region}</p>
+          <p>Country: {ipInfo.country}</p>
+          <p>Postal Code: {ipInfo.postal}</p>
+          <p>Location (Lat, Long): {ipInfo.loc}</p>
+          <p>Timezone: {ipInfo.timezone}</p>
+          <p>Organization/ISP: {ipInfo.org}</p>
+          <p>VPN Detected? {ipInfo.privacy.vpn ? 'Yes' : 'No'}</p>
+          <p>Proxy Detected? {ipInfo.privacy.proxy ? 'Yes' : 'No'}</p>
+          <p>Tor Detected? {ipInfo.privacy.tor ? 'Yes' : 'No'}</p>
+        </div>
+      )}
+
+      <div className="hidden w-screen h-px animate-glow md:block animate-fade-right bg-gradient-to-r from-zinc-300/0 via-zinc-300/50 to-zinc-300/0" />
+      <div className="my-16 text-center animate-fade-in">
+        <h2 className="text-sm text-zinc-500 ">
+          I Love Creating New Issues Everyday.
+        </h2>
+      </div>
+
+    </div>
+  );
+}
