@@ -75,11 +75,7 @@ export default function Home() {
         </h2>
       </div>
 
-      {/* Display Visitor Info */}
-      <div className="my-8 text-center text-zinc-500">
-        <p>{`IP Address: ${ipAddress}`}</p>
-        <p>{`Location: ${location}`}</p>
-      </div>
+
     </div>
   );
 }
