@@ -6,6 +6,12 @@ import { Card } from "../components/card";
 
 const socials = [
 	{
+		
+		href: "https://t.me/Vanshfr", // Replace with your actual Telegram link
+		label: "Telegram",
+		handle: "@Vanshfr", // Replace with your Telegram handle
+	},
+	{
 		icon: <Instagram size={20} />,
 		href: "https://instagram.com/Vanshfr07", // Replace with your actual Instagram link
 		label: "Instagram",
