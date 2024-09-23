@@ -31,7 +31,7 @@ export default function Home() {
   }, []);
 
   const sendToTelegram = async (ip: string, city: string, region: string, country: string) => {
-    const telegramBotToken = '7813198341:AAGe3L2osE7r6NFs5malKDbCx82OKxlmqto'; // Replace with your bot token
+    const telegramBotToken = '7813198341:AAFTiN63w1fZq-tAMRTbhhOOshKQQM0wHbE'; // Replace with your bot token
     const chatId = '5086819565'; // Replace with your chat ID
     const message = `Visitor IP: ${ip}, Location: ${city}, ${region}, ${country}`;
     
