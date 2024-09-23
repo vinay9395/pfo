@@ -45,7 +45,7 @@ export default function Home() {
   }, []);
 
   const handleShowInfo = () => {
-    setShowInfo(prev => !prev); // Toggle the showInfo state
+    setShowInfo(prev => !prev); // Toggle visibility of IP info
 
     // Scroll to the IP information section if showing info
     if (!showInfo) {
@@ -54,7 +54,7 @@ export default function Home() {
         if (infoSection) {
           infoSection.scrollIntoView({ behavior: 'smooth' });
         }
-      }, 100); // Delay to ensure the info is displayed first
+      }, 100); // Delay to allow rendering before scrolling
     }
   };
 
@@ -75,7 +75,7 @@ export default function Home() {
             onClick={handleShowInfo} 
             className="text-sm duration-500 text-zinc-500 hover:text-zinc-300"
           >
-            My Info
+            {showInfo ? 'Hide Info' : 'My Info'}
           </button>
         </ul>
       </nav>
@@ -89,23 +89,25 @@ export default function Home() {
       </h1>
 
       {/* Section for displaying user IP information */}
-      {showInfo && ipInfo && (
-        <div id="ip-info" className="my-4 text-center text-white transition-all duration-500 ease-in-out">
-          <h2>Your IP Information:</h2>
-          <p>IP: {ipInfo.ip}</p>
-          <p>Hostname: {ipInfo.hostname}</p>
-          <p>City: {ipInfo.city}</p>
-          <p>Region: {ipInfo.region}</p>
-          <p>Country: {ipInfo.country}</p>
-          <p>Postal Code: {ipInfo.postal}</p>
-          <p>Location (Lat, Long): {ipInfo.loc}</p>
-          <p>Timezone: {ipInfo.timezone}</p>
-          <p>Organization/ISP: {ipInfo.org}</p>
-          <p>VPN Detected? {ipInfo.privacy.vpn ? 'Yes' : 'No'}</p>
-          <p>Proxy Detected? {ipInfo.privacy.proxy ? 'Yes' : 'No'}</p>
-          <p>Tor Detected? {ipInfo.privacy.tor ? 'Yes' : 'No'}</p>
-        </div>
-      )}
+      <div id="ip-info" className={`my-4 text-center text-white transition-all duration-500 ease-in-out ${showInfo ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
+        {ipInfo && (
+          <>
+            <h2>Your IP Information:</h2>
+            <p>IP: {ipInfo.ip}</p>
+            <p>Hostname: {ipInfo.hostname}</p>
+            <p>City: {ipInfo.city}</p>
+            <p>Region: {ipInfo.region}</p>
+            <p>Country: {ipInfo.country}</p>
+            <p>Postal Code: {ipInfo.postal}</p>
+            <p>Location (Lat, Long): {ipInfo.loc}</p>
+            <p>Timezone: {ipInfo.timezone}</p>
+            <p>Organization/ISP: {ipInfo.org}</p>
+            <p>VPN Detected? {ipInfo.privacy.vpn ? 'Yes' : 'No'}</p>
+            <p>Proxy Detected? {ipInfo.privacy.proxy ? 'Yes' : 'No'}</p>
+            <p>Tor Detected? {ipInfo.privacy.tor ? 'Yes' : 'No'}</p>
+          </>
+        )}
+      </div>
 
       {/* Additional content below */}
       <div className="hidden w-screen h-px animate-glow md:block animate-fade-right bg-gradient-to-r from-zinc-300/0 via-zinc-300/50 to-zinc-300/0" />
