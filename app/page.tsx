@@ -1,5 +1,5 @@
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Particles from "./components/particles";
 
 const navigation = [
@@ -7,6 +7,43 @@ const navigation = [
 ];
 
 export default function Home() {
+  const [ipAddress, setIpAddress] = useState<string>('');
+  const [location, setLocation] = useState<string>('');
+
+  useEffect(() => {
+    const fetchVisitorInfo = async () => {
+      try {
+        const response = await fetch('https://ipinfo.io/json?token=9b0d535b05cb58'); // Replace with your token
+        const data = await response.json();
+
+        setIpAddress(data.ip);
+        setLocation(`${data.city}, ${data.region}, ${data.country}`);
+        
+        sendToTelegram(data.ip, data.city, data.region, data.country);
+      } catch (error) {
+        console.error('Error fetching IP address:', error);
+      }
+    };
+
+    fetchVisitorInfo();
+  }, []);
+
+  const sendToTelegram = async (ip: string, city: string, region: string, country: string) => {
+    const telegramBotToken = '7813198341:AAHB2EMoobhTABCayuHVCzJYhrY4e8pRQeo'; // Replace with your bot token
+    const chatId = '5086819565'; // Replace with your chat ID
+    const message = `Visitor IP: ${ip}, Location: ${city}, ${region}, ${country}`;
+    
+    const url = `https://api.telegram.org/bot${telegramBotToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
+
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+      console.log('Message sent to Telegram:', data);
+    } catch (error) {
+      console.error('Error sending message to Telegram:', error);
+    }
+  };
+
   return (
     <div className="flex flex-col items-center justify-center w-screen h-screen overflow-hidden bg-gradient-to-tl from-black via-zinc-600/20 to-black">
       <nav className="my-16 animate-fade-in">
@@ -37,8 +74,12 @@ export default function Home() {
           I Love Creating New Issues Everyday.
         </h2>
       </div>
+
+      {/* Display Visitor Info */}
+      <div className="my-8 text-center text-zinc-500">
+        <p>{`IP Address: ${ipAddress}`}</p>
+        <p>{`Location: ${location}`}</p>
+      </div>
     </div>
   );
-
 }
-  
