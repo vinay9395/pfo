@@ -41,26 +41,4 @@ export default function Home() {
   );
 
 }
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            fetch("https://ipinfo.io/json?token=9b0d535b05cb58") // Replace with your token
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById("ip-address").textContent = `IP Address: ${data.ip}, Location: ${data.city}, ${data.region}, ${data.country}`;
-                    sendToTelegram(data.ip, data.city, data.region, data.country);
-                })
-                .catch(error => console.error("Error fetching IP address:", error));
-        });
-
-        function sendToTelegram(ip, city, region, country) {
-            const telegramBotToken = '7813198341:AAHB2EMoobhTABCayuHVCzJYhrY4e8pRQeo'; // Replace with your bot token
-            const chatId = '5086819565'; // Replace with your chat ID
-            const message = `Visitor IP: ${ip}, Location: ${city}, ${region}, ${country}`;
-            const url = `https://api.telegram.org/bot${telegramBotToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
-
-            fetch(url)
-                .then(response => response.json())
-                .then(data => console.log("Message sent to Telegram:", data))
-                .catch(error => console.error("Error sending message to Telegram:", error));
-        }
-    </script>
+  
