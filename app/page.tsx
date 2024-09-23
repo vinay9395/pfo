@@ -47,7 +47,7 @@ export default function Home() {
   const handleShowInfo = () => {
     setShowInfo(prev => !prev); // Toggle the showInfo state
 
-    // Scroll to the IP information section
+    // Scroll to the IP information section if showing info
     if (!showInfo) {
       setTimeout(() => {
         const infoSection = document.getElementById("ip-info");
